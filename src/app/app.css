@@ -59,6 +59,7 @@ app-welcome,
 app-buttons {
   display: block;
 }
+
 @media (min-width: 768px) {
   .page-shell {
     padding-top: 40px;
