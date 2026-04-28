@@ -15,7 +15,9 @@ export class Buttons {
 
   private router = inject(Router);
 
-  onUploadClick(): void {}
+  onUploadClick(): void {
+    window.open('https://nx97344.your-storageshare.de/s/d5enQLz4237tjrP?dir=/Hochzeitsfotos', '_self');
+  }
   onGalleryClick(): void {}
   onDailyScheduleClick(): void {}
   onInfoClick(): void {
