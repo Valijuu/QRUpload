@@ -1,5 +1,6 @@
 import { Component, inject} from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ActionService } from '../../app/services/actions/action-service';
 
 @Component({
   selector: 'app-buttons',
@@ -13,14 +14,16 @@ export class Buttons {
   buttonTextDailySchedule: string = "Tagesablauf";
   buttonTextInfo: string = "Hochzeitsprofis";
 
-  private router = inject(Router);
+  private service = inject(ActionService);
 
   onUploadClick(): void {
-    window.open('https://nx97344.your-storageshare.de/s/d5enQLz4237tjrP?dir=/Hochzeitsfotos', '_self');
+    this.service.openUpload()
   }
   onGalleryClick(): void {}
+
   onDailyScheduleClick(): void {}
+
   onInfoClick(): void {
-    this.router.navigate(['/weedingpros']);
+    this.service.navigateToWeddingpros()
   }
 }
