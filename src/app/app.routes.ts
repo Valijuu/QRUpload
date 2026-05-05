@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Weedingpros } from '../components/weedingpros/weedingpros';
+import { Weddingpros } from '../components/weddingpros/weddingpros';
 import { Home } from '../components/home/home';
 
 export const routes: Routes = [
@@ -9,8 +9,8 @@ export const routes: Routes = [
     title: 'Home',
   },
   {
-    path: 'weedingpros',
-    component: Weedingpros,
-    title: 'Weedingpros',
+    path: 'weddingpros',
+    component: Weddingpros,
+    title: 'Weddingpros',
   }
 ];

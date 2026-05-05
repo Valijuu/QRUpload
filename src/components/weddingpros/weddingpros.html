@@ -1,0 +1,27 @@
+<section>
+  <h1 class="weddingpros-title">{{ weedingProsTitle }}</h1>
+  <p class="weddingpros-opener">{{ weedingProsOpener }}</p>
+</section>
+<section class="weddingpros-section">
+  @for (pro of weddingPros; track pro.name) {
+    <div class="weedingpros-card">
+      <p class="weddingpros-title">{{ pro.title }}</p>
+      <h3 class="weddingpros-name">{{ pro.name }}</h3>
+      <div class="weddingpros-image">
+        <img
+          [src]="pro.image"
+          [alt]="pro.name"
+          class="wedding-image"
+        />
+      </div>
+      <div class="icon-row">
+        <a [href]="pro.website" [target]="pro.target" rel="noopener noreferrer" aria-label="Website">
+          <i class="fa-solid fa-globe"></i>
+        </a>
+        <a [href]="pro.instagram" [target]="pro.target" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+  }
+</section>
