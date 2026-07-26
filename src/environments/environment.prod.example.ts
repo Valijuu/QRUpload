@@ -4,4 +4,5 @@ export const environment = {
   production: true,
   accessToken: 'REPLACE_WITH_REAL_TOKEN',
   uploadUrl: 'REPLACE_WITH_REAL_NEXTCLOUD_LINK',
+  weddingImageUrl: 'REPLACE_WITH_URL_TO_YOUR_PHOTO',
 };

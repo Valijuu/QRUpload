@@ -4,4 +4,5 @@ export const environment = {
   // stattdessen environment.prod.ts verwendet, siehe README.
   accessToken: 'LOCAL_DEV_TOKEN',
   uploadUrl: '',
+  weddingImageUrl: '',
 };
