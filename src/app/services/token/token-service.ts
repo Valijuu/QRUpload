@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
-  // Ändere diesen Token und verwende denselben in der QR-Code-URL
-  private readonly VALID_TOKEN = 'Tz8nQdP3mXkR5vJhW2bGcYsL';
+  // Der eigentliche Token liegt in src/environments/environment(.prod).ts
+  // und damit außerhalb des Repositories, siehe README.
+  private readonly VALID_TOKEN = environment.accessToken;
   private readonly STORAGE_KEY = 'wedding_access_token';
 
   validateAndStore(token: string): boolean {
