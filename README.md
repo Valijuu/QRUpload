@@ -36,18 +36,18 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Zugriffs-Token konfigurieren
+## Zugriffstoken und Upload-Link konfigurieren
 
-Der Zugriff auf die Seite wird über einen Token gesteuert, der **nicht** im Repository liegt:
+Der Zugriffstoken und der Nextcloud-Upload-Link werden über eine Environment-Datei konfiguriert, die **nicht** im Repository liegt:
 
 1. `src/environments/environment.prod.example.ts` nach `src/environments/environment.prod.ts` kopieren.
-2. Dort einen eigenen, zufälligen `accessToken`-Wert eintragen.
-3. Denselben Wert als `?token=...`-Parameter in der QR-Code-URL verwenden.
+2. Dort einen eigenen, zufälligen `accessToken`-Wert sowie den echten `uploadUrl` (Nextcloud-Freigabelink) eintragen.
+3. Denselben Token-Wert als `?token=...`-Parameter in der QR-Code-URL verwenden.
 4. `src/environments/environment.prod.ts` ist in `.gitignore` und darf niemals committet werden.
 
-Für die lokale Entwicklung (`ng serve`) wird automatisch `src/environments/environment.ts` mit einem Platzhalter-Token verwendet.
+Für die lokale Entwicklung (`ng serve`) wird automatisch `src/environments/environment.ts` mit Platzhalterwerten verwendet.
 
-**Hinweis zu den Grenzen dieses Schutzes:** Diese Anwendung hat kein eigenes Backend. Der Token landet dadurch zwangsläufig im ausgelieferten JavaScript-Bundle und lässt sich von technisch versierten Personen über die Browser-Entwicklertools auslesen. Der Token schützt also nur vor zufälligen Besuchern, nicht vor gezieltem Zugriff. Für echten Schutz der hochgeladenen Fotos sollte zusätzlich der Nextcloud-Freigabelink (in `action-service.ts`) mit einem Passwort abgesichert werden.
+**Hinweis zu den Grenzen dieses Schutzes:** Diese Anwendung hat kein eigenes Backend. Token und Upload-Link landen dadurch zwangsläufig im ausgelieferten JavaScript-Bundle und lassen sich von technisch versierten Personen über die Browser-Entwicklertools auslesen. Der Token schützt also nur vor zufälligen Besuchern, nicht vor gezieltem Zugriff. Für echten Schutz der hochgeladenen Fotos sollte zusätzlich der Nextcloud-Freigabelink selbst in Nextcloud mit einem Passwort abgesichert werden.
 
 ## Running unit tests
 
