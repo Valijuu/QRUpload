@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -7,11 +8,8 @@ import { Router } from '@angular/router';
 export class ActionService {
   private router = inject(Router);
 
-  // TODO: Nextcloud-Freigabelink hier eintragen (nicht committen, siehe README)
-  private readonly UPLOAD_URL = '';
-
   openUpload(): void {
-    window.open(this.UPLOAD_URL, '_self');
+    window.open(environment.uploadUrl, '_self');
   }
 
   navigateToWeddingpros(): void {
