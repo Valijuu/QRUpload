@@ -17,11 +17,6 @@
 
 .tagesablauf-image-wrapper {
   margin-top: 20px;
-  max-height: 70vh;
-  overflow-y: auto;
-  border-radius: 18px;
-  border: 1px solid #e5ece7;
-  background: #f8fbf8;
 }
 
 .tagesablauf-image {
