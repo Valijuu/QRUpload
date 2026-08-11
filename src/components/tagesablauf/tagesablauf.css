@@ -23,6 +23,6 @@
   display: block;
   width: 100%;
   max-width: 420px;
-  height: auto;
+  aspect-ratio: 922 / 2176;
   margin: 0 auto;
 }
