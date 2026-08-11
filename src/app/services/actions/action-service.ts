@@ -17,7 +17,7 @@ export class ActionService {
   }
 
   openDailySchedule(): void {
-   //TODO: navigate zu Tagesablauf
+    this.router.navigate(['/tagesablauf']);
   }
 
   navigateToWeddingpros(): void {

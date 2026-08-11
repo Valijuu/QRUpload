@@ -1,0 +1,33 @@
+.tagesablauf-title {
+  margin: 0;
+  text-align: center;
+  font-size: 34px;
+  line-height: 1.1;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #41594b;
+}
+
+.tagesablauf-opener {
+  margin: 14px 0 0;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #607568;
+}
+
+.tagesablauf-image-wrapper {
+  margin-top: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  border: 1px solid #e5ece7;
+  background: #f8fbf8;
+}
+
+.tagesablauf-image {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin: 0 auto;
+}
