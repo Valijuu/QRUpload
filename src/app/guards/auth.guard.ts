@@ -2,12 +2,12 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { TokenService } from '../services/token/token-service';
 
-export const authGuard: CanActivateFn = (route) => {
+export const authGuard: CanActivateFn = async (route) => {
   const tokenService = inject(TokenService);
   const router = inject(Router);
 
   const urlToken = route.queryParamMap.get('token');
-  if (urlToken && tokenService.validateAndStore(urlToken)) {
+  if (urlToken && (await tokenService.validateAndStore(urlToken))) {
     return true;
   }
 

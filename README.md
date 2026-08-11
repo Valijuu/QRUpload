@@ -36,21 +36,23 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Zugriffstoken, Upload-Link und Foto konfigurieren
+## Zugriffstoken, Backend-URL, Upload-Link und Foto konfigurieren
 
-Token, Nextcloud-Upload-Link und das Hochzeitsfoto werden über eine Environment-Datei konfiguriert, die **nicht** im Repository liegt:
+Der Zugang wird über das Backend (`SpringBoot/wedding`) geprüft: Der geteilte Zugangs-Token liegt nur noch serverseitig (Env-Var `WEDDING_ACCESS_TOKEN`), nicht mehr im JS-Bundle. Das Frontend schickt den Token aus der QR-Code-URL an `POST /api/auth/validate` und erhält bei Erfolg ein JWT zurück, das lokal gespeichert wird.
+
+Backend-URL, Nextcloud-Upload-Link und das Hochzeitsfoto werden über eine Environment-Datei konfiguriert, die **nicht** im Repository liegt:
 
 1. `src/environments/environment.prod.example.ts` nach `src/environments/environment.prod.ts` kopieren.
 2. Dort eintragen:
-   - einen eigenen, zufälligen `accessToken`
+   - `apiBaseUrl`: die URL des deployten Spring-Boot-Backends (z. B. die Cloud-Run-URL)
    - den echten `uploadUrl` (Nextcloud-Freigabelink)
    - eine `weddingImageUrl`, die auf euer Foto zeigt (z. B. ein privater/unlisted Link, kein Pfad im Repo)
-3. Denselben Token-Wert als `?token=...`-Parameter in der QR-Code-URL verwenden.
+3. Den Zugangs-Token (identisch mit `WEDDING_ACCESS_TOKEN` im Backend) als `?token=...`-Parameter in der QR-Code-URL verwenden.
 4. `src/environments/environment.prod.ts` ist in `.gitignore` und darf niemals committet werden.
 
-Für die lokale Entwicklung (`ng serve`) wird automatisch `src/environments/environment.ts` mit Platzhalterwerten verwendet (das Foto erscheint dort als gebrochenes Bild, bis eine lokale `weddingImageUrl` gesetzt wird).
+Für die lokale Entwicklung (`ng serve`) wird automatisch `src/environments/environment.ts` mit Platzhalterwerten verwendet (das Foto erscheint dort als gebrochenes Bild, bis eine lokale `weddingImageUrl` gesetzt wird; `apiBaseUrl` zeigt standardmäßig auf `http://localhost:8080`).
 
-**Hinweis zu den Grenzen dieses Schutzes:** Diese Anwendung hat kein eigenes Backend. Token, Upload-Link und Bild-URL landen dadurch zwangsläufig im ausgelieferten JavaScript-Bundle und lassen sich von technisch versierten Personen über die Browser-Entwicklertools auslesen. Der Token schützt also nur vor zufälligen Besuchern, nicht vor gezieltem Zugriff. Für echten Schutz der hochgeladenen Fotos sollte zusätzlich der Nextcloud-Freigabelink selbst in Nextcloud mit einem Passwort abgesichert werden.
+**Hinweis zu den Grenzen dieses Schutzes:** Upload-Link und Bild-URL landen weiterhin im ausgelieferten JavaScript-Bundle und lassen sich von technisch versierten Personen über die Browser-Entwicklertools auslesen. Der Zugangs-Token selbst wird serverseitig geprüft, steht aber offen in der QR-Code-URL und schützt daher nur vor zufälligen Besuchern, nicht vor gezieltem Zugriff. Für echten Schutz der hochgeladenen Fotos sollte zusätzlich der Nextcloud-Freigabelink selbst in Nextcloud mit einem Passwort abgesichert werden.
 
 ## Running unit tests
 
