@@ -38,6 +38,10 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
+.firebase/
+
+# Lokale Skill-/Agent-Tooling-Dateien, kein App-Code
+.agents/
 
 # System files
 .DS_Store
