@@ -19,9 +19,13 @@ export class Buttons {
   onUploadClick(): void {
     this.service.openUpload()
   }
-  onGalleryClick(): void {}
+  onGalleryClick(): void {
+    this.service.openGallery()
+  }
 
-  onDailyScheduleClick(): void {}
+  onDailyScheduleClick(): void {
+    this.service.openDailySchedule()
+  }
 
   onInfoClick(): void {
     this.service.navigateToWeddingpros()

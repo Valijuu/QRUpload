@@ -9,7 +9,15 @@ export class ActionService {
   private router = inject(Router);
 
   openUpload(): void {
-    window.open(environment.uploadUrl, '_self');
+    window.open(environment.uploadUrl, '_blank', 'noopener,noreferrer');
+  }
+
+  openGallery(): void {
+    window.open(environment.galleryUrl, '_blank', 'noopener,noreferrer');
+  }
+
+  openDailySchedule(): void {
+   //TODO: navigate zu Tagesablauf
   }
 
   navigateToWeddingpros(): void {
