@@ -45,3 +45,6 @@ Thumbs.db
 
 # Environment secrets (lokal anlegen, niemals committen)
 src/environments/environment.prod.ts
+
+# Privates Hochzeitsfoto (lokal anlegen, niemals committen)
+public/Wedding.png
