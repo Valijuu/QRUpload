@@ -4,5 +4,4 @@ export interface Weddingpro {
   image: string;
   website: string;
   instagram: string;
-  target: string;
 }

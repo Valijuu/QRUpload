@@ -29,7 +29,6 @@ export class WeddingprosService {
         image: './Sabina_Papiorek.jpg',
         website: this.websiteModeration,
         instagram: this.instagramModeration,
-        target: '_blank',
       },
       {
         title: 'Fotografin',
@@ -37,7 +36,6 @@ export class WeddingprosService {
         image: './Sammy_Loveless.jpg',
         website: this.websitePhotograph,
         instagram: this.instagramPhotograph,
-        target: '_self',
       },
       {
         title: 'DJ',
@@ -45,7 +43,6 @@ export class WeddingprosService {
         image: './frezhDj.jpg',
         website: this.websiteDj,
         instagram: this.instagramDj,
-        target: '_self',
       },
       {
         title: 'Floristik',
@@ -53,7 +50,6 @@ export class WeddingprosService {
         image: './Blumen_Rauh.jpg',
         website: this.websiteFloristry,
         instagram: this.instagramFloristry,
-        target: '_blank',
       },
       {
         title: 'Tanzschule',
@@ -61,7 +57,6 @@ export class WeddingprosService {
         image: './Dance_Cube.jpg',
         website: this.websiteDanceSchool,
         instagram: this.instagramDanceSchool,
-        target: '_blank',
       },
     ];
   }
