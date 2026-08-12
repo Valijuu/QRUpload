@@ -17,12 +17,16 @@
 
 .tagesablauf-image-wrapper {
   margin-top: 20px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 640 / 2176;
 }
 
 .tagesablauf-image {
   display: block;
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 922 / 2176;
-  margin: 0 auto;
+  width: 144.0625%;
+  margin-left: -12.8125%;
 }

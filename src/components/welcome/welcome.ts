@@ -7,10 +7,11 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './welcome.css',
 })
 export class Welcome {
-  eyebrow: string = 'MIT LIEBE EINGELADEN';
+  eyebrow: string = 'SCHÖN DASS IHR DA SEID';
   title: string = 'Unsere Hochzeit';
-  subtitle: string = 'Wir freuen uns, diesen besonderen Tag mit euch zu feiern';
+  subtitle: string = 'Wir freuen uns von Herzen, diesen besonderen Tag mit euch zu feiern.';
   guestText: string =
-    'Schön, dass ihr unseren besonderen Tag mit uns verbringt. Auf dieser Seite findet' +
-    ' ihr alle wichtigen Informationen, könnt Erinnerungen teilen und später die schönsten Momente noch einmal ansehen';
+    'Auf dieser Seite findet ihr alle wichtigen Informationen rund um unseren Tag,' +
+    ' könnt eigene Fotos und Erinnerungen mit uns teilen und später gemeinsam die' +
+    ' schönsten Momente noch einmal erleben.';
 }
