@@ -12,6 +12,7 @@ export class Buttons {
   buttonTextUpload: string = "Fotos hochladen";
   buttonTextGallery: string = "Galerie";
   buttonTextDailySchedule: string = "Tagesablauf";
+  buttonTextSpeisenGetraenke: string = "Speisen & Getränke";
   buttonTextInfo: string = "Hochzeitsprofis";
 
   private service = inject(ActionService);
@@ -25,6 +26,10 @@ export class Buttons {
 
   onDailyScheduleClick(): void {
     this.service.openDailySchedule()
+  }
+
+  onSpeisenGetraenkeClick(): void {
+    this.service.openSpeisenGetraenke()
   }
 
   onInfoClick(): void {

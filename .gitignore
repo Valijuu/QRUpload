@@ -52,3 +52,7 @@ src/environments/environment.prod.ts
 
 # Privates Hochzeitsfoto (lokal anlegen, niemals committen)
 public/Wedding.png
+
+# Getränke-/Speisekarte (lokal anlegen, niemals committen)
+public/Getraenkekarte.png
+public/Speisekarte.png

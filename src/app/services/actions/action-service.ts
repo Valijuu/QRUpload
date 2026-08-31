@@ -20,6 +20,10 @@ export class ActionService {
     this.router.navigate(['/tagesablauf']);
   }
 
+  openSpeisenGetraenke(): void {
+    this.router.navigate(['/speisen-getraenke']);
+  }
+
   navigateToWeddingpros(): void {
     this.router.navigate(['/weddingpros']);
   }
