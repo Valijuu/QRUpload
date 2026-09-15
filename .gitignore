@@ -56,3 +56,7 @@ public/Wedding.png
 # Getränke-/Speisekarte (lokal anlegen, niemals committen)
 public/Getraenkekarte.png
 public/Speisekarte.png
+
+# Original-Fotos/Links vor der Anonymisierung fürs öffentliche Repo,
+# niemals committen (siehe private-restore/RESTORE.md)
+private-restore/
