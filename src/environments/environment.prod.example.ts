@@ -3,6 +3,7 @@
 export const environment = {
   production: true,
   apiBaseUrl: 'REPLACE_WITH_CLOUD_RUN_URL',
-  uploadUrl: 'REPLACE_WITH_REAL_NEXTCLOUD_LINK',
+  uploadUrl: 'REPLACE_WITH_REAL_NEXTCLOUD_UPLOAD_LINK',
+  galleryUrl: 'REPLACE_WITH_REAL_NEXTCLOUD_GALLERY_LINK',
   weddingImageUrl: 'REPLACE_WITH_URL_TO_YOUR_PHOTO',
 };

@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist\\QRUpload\\browser",
+    "public": "dist/QRUpload/browser",
     "ignore": [
       "firebase.json",
       "**/.*",

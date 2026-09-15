@@ -1,19 +1,14 @@
-import { Component, signal } from '@angular/core';
-import { Welcome } from '../components/welcome/welcome';
-import { Buttons } from '../components/buttons/buttons';
-import { DateComponent } from '../components/date/date';
+import { Component } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Welcome, Buttons, DateComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('QRUpload');
-
   constructor(router: Router) {
     // Blendet den Ladescreen aus index.html aus, sobald die erste Navigation
     // (inkl. der asynchronen Token-Prüfung im authGuard) abgeschlossen ist.
