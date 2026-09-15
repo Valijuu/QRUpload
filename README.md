@@ -1,77 +1,103 @@
 # QRUpload
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.7.
+Eine gästefreundliche Hochzeits-Website: Gäste scannen einen QR-Code auf ihrer Einladung, gelangen auf eine per Token/JWT geschützte Seite und können dort direkt Fotos zu einer gemeinsamen Nextcloud-Galerie hochladen, den Tagesablauf und die Speisekarte einsehen sowie die Dienstleister der Hochzeit kennenlernen.
 
-## Development server
+Frontend (dieses Repo) und Backend bilden zusammen die Anwendung:
 
-To start a local development server, run:
+| Repo | Zweck |
+|---|---|
+| **QRUpload** (dieses Repo) | Angular-Frontend, ausgeliefert über Firebase Hosting |
+| [qrupload-backend](https://github.com/Valijuu/qrupload-backend) | Spring-Boot-Backend, prüft den Zugriffstoken und stellt JWTs aus |
+
+> Hinweis: Namen, Fotos und Social-Links auf der „Hochzeitsprofis"-Seite sind in diesem öffentlichen Repo durch Platzhalterdaten ersetzt (siehe [`weddingpros-service.ts`](src/app/services/weddingpros/weddingpros-service.ts)).
+
+## Features
+
+- **QR-Code-Zugang:** Der Token aus der QR-Code-URL wird gegen das Backend geprüft; bei Erfolg wird ein JWT ausgestellt und lokal gespeichert (`authGuard`, `TokenService`).
+- **Foto-Upload & Galerie:** Buttons öffnen die konfigurierten Nextcloud-Freigabelinks für Upload bzw. Galerie in einem neuen Tab.
+- **Tagesablauf & Speisen/Getränke:** Statische Infoseiten mit dem Ablauf des Tages und der Menükarte.
+- **Hochzeitsprofis:** Übersicht der Dienstleister (Moderation, Fotografie, DJ, Floristik, Tanzschule) mit Website- und Instagram-Links.
+- **Zugriffsschutz:** Ungültige oder fehlende Tokens landen auf einer eigenen „Zugang verweigert"-Seite statt auf dem eigentlichen Inhalt.
+
+## Tech-Stack
+
+- [Angular 21](https://angular.dev/) mit Standalone-Components und dem neuen Control-Flow (`@for`)
+- TypeScript, RxJS
+- [Vitest](https://vitest.dev/) für Unit-Tests
+- Firebase Hosting für das Deployment
+- Kommunikation mit dem Spring-Boot-Backend über `HttpClient` (Fetch-basiert)
+
+## Architektur: Zugriffsschutz
+
+```
+QR-Code-URL (?token=…)
+        │
+        ▼
+  authGuard  ──► POST /api/auth/validate (Backend)
+        │                  │
+        │           gültig?│ liefert JWT
+        ▼                  ▼
+  TokenService speichert JWT lokal, prüft exp-Claim bei jedem Seitenaufruf
+        │
+        ▼
+  Seite wird gerendert (Route hinter authGuard)
+```
+
+Details zum Backend (JWT-Ausstellung, CORS, Deployment) stehen im [Backend-README](https://github.com/Valijuu/qrupload-backend#readme).
+
+## Entwicklung
+
+Voraussetzung: Node.js (LTS empfohlen) und npm.
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Die App läuft dann unter `http://localhost:4200`. Für die lokale Entwicklung wird automatisch `src/environments/environment.ts` mit Platzhalterwerten verwendet; `apiBaseUrl` zeigt standardmäßig auf `http://localhost:8080` (das lokal laufende Backend).
 
-## Code scaffolding
+### Environment konfigurieren (Produktion)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Zugriffstoken, Backend-URL, Upload-Link und Foto konfigurieren
-
-Der Zugang wird über das Backend (`SpringBoot/wedding`) geprüft: Der geteilte Zugangs-Token liegt nur noch serverseitig (Env-Var `WEDDING_ACCESS_TOKEN`), nicht mehr im JS-Bundle. Das Frontend schickt den Token aus der QR-Code-URL an `POST /api/auth/validate` und erhält bei Erfolg ein JWT zurück, das lokal gespeichert wird.
-
-Backend-URL, Nextcloud-Upload-Link und das Hochzeitsfoto werden über eine Environment-Datei konfiguriert, die **nicht** im Repository liegt:
+Backend-URL, Nextcloud-Links und das Hochzeitsfoto werden über eine Environment-Datei konfiguriert, die **nicht** im Repository liegt:
 
 1. `src/environments/environment.prod.example.ts` nach `src/environments/environment.prod.ts` kopieren.
-2. Dort eintragen:
-   - `apiBaseUrl`: die URL des deployten Spring-Boot-Backends (z. B. die Cloud-Run-URL)
-   - den echten `uploadUrl` (Nextcloud-Freigabelink)
-   - eine `weddingImageUrl`, die auf euer Foto zeigt (z. B. ein privater/unlisted Link, kein Pfad im Repo)
+2. Werte eintragen:
+   - `apiBaseUrl`: URL des deployten Spring-Boot-Backends (z. B. die Cloud-Run-URL)
+   - `uploadUrl` / `galleryUrl`: echte Nextcloud-Freigabelinks
+   - `weddingImageUrl`: URL zu eurem Foto (z. B. ein privater/unlisted Link, kein Pfad im Repo)
 3. Den Zugangs-Token (identisch mit `WEDDING_ACCESS_TOKEN` im Backend) als `?token=...`-Parameter in der QR-Code-URL verwenden.
-4. `src/environments/environment.prod.ts` ist in `.gitignore` und darf niemals committet werden.
 
-Für die lokale Entwicklung (`ng serve`) wird automatisch `src/environments/environment.ts` mit Platzhalterwerten verwendet (das Foto erscheint dort als gebrochenes Bild, bis eine lokale `weddingImageUrl` gesetzt wird; `apiBaseUrl` zeigt standardmäßig auf `http://localhost:8080`).
+`environment.prod.ts` ist in `.gitignore` und darf niemals committet werden.
 
-**Hinweis zu den Grenzen dieses Schutzes:** Upload-Link und Bild-URL landen weiterhin im ausgelieferten JavaScript-Bundle und lassen sich von technisch versierten Personen über die Browser-Entwicklertools auslesen. Der Zugangs-Token selbst wird serverseitig geprüft, steht aber offen in der QR-Code-URL und schützt daher nur vor zufälligen Besuchern, nicht vor gezieltem Zugriff. Für echten Schutz der hochgeladenen Fotos sollte zusätzlich der Nextcloud-Freigabelink selbst in Nextcloud mit einem Passwort abgesichert werden.
+**Grenzen dieses Schutzes:** Upload-Link und Bild-URL landen im ausgelieferten JavaScript-Bundle und lassen sich von technisch versierten Personen über die Browser-Entwicklertools auslesen. Der Zugangs-Token wird serverseitig geprüft, steht aber offen in der QR-Code-URL und schützt daher nur vor zufälligen Besuchern, nicht vor gezieltem Zugriff. Für echten Schutz der hochgeladenen Fotos sollte zusätzlich der Nextcloud-Freigabelink selbst mit einem Passwort abgesichert werden.
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Tests
 
 ```bash
-ng test
+ng test          # Unit-Tests (Vitest)
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+## Build & Deployment
 
 ```bash
-ng e2e
+ng build --configuration production   # Output nach dist/QRUpload/browser
+firebase deploy --only hosting
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Projekt-Zuordnung steht in `.firebaserc`.
 
-## Additional Resources
+## Projektstruktur
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```
+src/
+  app/
+    guards/       # authGuard: prüft Token/JWT vor jeder Route
+    services/      # TokenService, ActionService, WeddingprosService
+    interfaces/
+  components/
+    home/ welcome/ buttons/ date/            # Startseite
+    tagesablauf/ speisen-getraenke/          # Infoseiten
+    weddingpros/                              # Dienstleister-Übersicht
+    access-denied/                            # Fallback bei ungültigem Token
+  environments/
+```

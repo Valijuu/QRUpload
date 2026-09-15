@@ -1,60 +1,61 @@
 import { Injectable } from '@angular/core';
 import { Weddingpro } from '../../interfaces/weddingpro';
 
+// Platzhalterdaten für das öffentliche Repo. Für den echten Einsatz durch
+// die Namen, Bilder und Links der tatsächlichen Dienstleister ersetzen.
 @Injectable({
   providedIn: 'root',
 })
 export class WeddingprosService {
-  instagramModeration: string = 'https://www.instagram.com/saaabinkaaa/';
-  websiteModeration: string = 'https://sabinapapiorek.com/';
+  instagramModeration: string = 'https://www.instagram.com/example_moderation/';
+  websiteModeration: string = 'https://example.com/moderation';
 
-  instagramPhotograph: string = 'https://www.instagram.com/slphotodesign.fotostudio/';
-  websitePhotograph: string =
-    'https://slphotodesign.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio';
+  instagramPhotograph: string = 'https://www.instagram.com/example_photography/';
+  websitePhotograph: string = 'https://example.com/photography';
 
-  instagramDj: string = 'https://www.instagram.com/frezhdj/';
-  websiteDj: string = 'https://www.instagram.com/frezhsounds/';
+  instagramDj: string = 'https://www.instagram.com/example_dj/';
+  websiteDj: string = 'https://example.com/dj';
 
-  instagramFloristry: string = 'https://www.instagram.com/blumen.rauh/';
-  websiteFloristry: string = 'https://www.blumenrauh.de/';
+  instagramFloristry: string = 'https://www.instagram.com/example_floristry/';
+  websiteFloristry: string = 'https://example.com/floristry';
 
-  instagramDanceSchool: string = 'https://www.instagram.com/dancecube_nbg/';
-  websiteDanceSchool: string = 'https://dance-cube-nuernberg.de/';
+  instagramDanceSchool: string = 'https://www.instagram.com/example_dance_school/';
+  websiteDanceSchool: string = 'https://example.com/dance-school';
 
   getWeddingpro(): Weddingpro[] {
     return [
       {
         title: 'Moderation',
-        name: 'Sabina Papiorek',
-        image: './Sabina_Papiorek.jpg',
+        name: 'Beispiel Moderation',
+        image: './vendor-placeholder.svg',
         website: this.websiteModeration,
         instagram: this.instagramModeration,
       },
       {
         title: 'Fotografin',
-        name: 'Sammy Loveless',
-        image: './Sammy_Loveless.jpg',
+        name: 'Beispiel Fotografie',
+        image: './vendor-placeholder.svg',
         website: this.websitePhotograph,
         instagram: this.instagramPhotograph,
       },
       {
         title: 'DJ',
-        name: 'Andreas Hablowetz #frezhdj',
-        image: './frezhDj.jpg',
+        name: 'Beispiel DJ',
+        image: './vendor-placeholder.svg',
         website: this.websiteDj,
         instagram: this.instagramDj,
       },
       {
         title: 'Floristik',
-        name: 'Blumen Rauh',
-        image: './Blumen_Rauh.jpg',
+        name: 'Beispiel Floristik',
+        image: './vendor-placeholder.svg',
         website: this.websiteFloristry,
         instagram: this.instagramFloristry,
       },
       {
         title: 'Tanzschule',
-        name: 'Dance Cube',
-        image: './Dance_Cube.jpg',
+        name: 'Beispiel Tanzschule',
+        image: './vendor-placeholder.svg',
         website: this.websiteDanceSchool,
         instagram: this.instagramDanceSchool,
       },
