@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './date.css',
 })
 export class DateComponent {
-  weddingDate: string = '04.09.2026';
-  weddingLocation: string = 'Krämers Rotes Ross & Fest-Stodl';
+  weddingDate: string = 'TT.MM.JJJJ';
+  weddingLocation: string = 'Name des Veranstaltungsorts';
 }
