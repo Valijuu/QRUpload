@@ -1,9 +1,13 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { GalleryLoadResult, GalleryService } from '../../app/services/gallery/gallery-service';
-import { GalleryIndex } from '../../app/services/gallery/gallery-index';
+import { LOGIN_URL } from '../../app/route-paths';
+import { GalleryIndex, ZipKind, ZipPackage } from '../../app/services/gallery/gallery-index';
 import { Lightbox } from '../lightbox/lightbox';
 import { formatBytes } from './format-bytes';
+
+const ZIP_KIND_ORIGINAL: ZipKind = 'original';
+const ZIP_KIND_MOBILE: ZipKind = 'mobile';
 
 type ViewState = 'loading' | 'ready' | 'error';
 
@@ -22,8 +26,8 @@ export class Gallery implements OnInit {
   protected readonly openPhoto = signal<number | null>(null);
 
   protected readonly photos = computed(() => this.index()?.photos ?? []);
-  protected readonly originalZips = computed(() => (this.index()?.zips ?? []).filter((zip) => zip.kind === 'original'));
-  protected readonly mobileZips = computed(() => (this.index()?.zips ?? []).filter((zip) => zip.kind === 'mobile'));
+  protected readonly originalZips = computed(() => this.zipsOfKind(ZIP_KIND_ORIGINAL));
+  protected readonly mobileZips = computed(() => this.zipsOfKind(ZIP_KIND_MOBILE));
   protected readonly formatBytes = formatBytes;
   protected readonly mobileUrl = (id: string) => this.gallery.mobileUrl(id);
   protected readonly originalUrl = (id: string) => this.gallery.originalUrl(id);
@@ -37,9 +41,13 @@ export class Gallery implements OnInit {
     await this.show(await this.gallery.reload());
   }
 
+  private zipsOfKind(kind: ZipKind): ZipPackage[] {
+    return (this.index()?.zips ?? []).filter((zip) => zip.kind === kind);
+  }
+
   private async show(result: GalleryLoadResult): Promise<void> {
     if (result.kind === 'unauthorized') {
-      await this.router.navigate(['/login']);
+      await this.router.navigate([LOGIN_URL]);
       return;
     }
     if (result.kind === 'error') {

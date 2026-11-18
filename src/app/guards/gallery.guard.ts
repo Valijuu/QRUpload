@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { LOGIN_URL } from '../route-paths';
 import { GalleryService } from '../services/gallery/gallery-service';
 
 /**
@@ -11,7 +12,7 @@ export const galleryGuard: CanActivateFn = async () => {
   const router = inject(Router);
   const result = await inject(GalleryService).load();
   if (result.kind === 'unauthorized') {
-    return router.createUrlTree(['/login']);
+    return router.createUrlTree([LOGIN_URL]);
   }
   return true;
 };

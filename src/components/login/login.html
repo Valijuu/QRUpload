@@ -17,6 +17,6 @@
     @if (message(); as text) {
       <p class="message" role="alert">{{ text }}</p>
     }
-    <button type="submit" class="primary-btn" [disabled]="busy() || !password()">Zu den Fotos</button>
+    <button type="submit" class="primary-btn lifted" [disabled]="busy() || !password()">Zu den Fotos</button>
   </form>
 </section>

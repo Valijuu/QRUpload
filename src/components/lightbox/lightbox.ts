@@ -4,6 +4,10 @@ import { Photo } from '../../app/services/gallery/gallery-index';
 // Ab dieser Strecke (px) zaehlt eine Bewegung als Wischen statt als Antippen
 const SWIPE_THRESHOLD = 50;
 
+const KEY_PREVIOUS = 'ArrowLeft';
+const KEY_NEXT = 'ArrowRight';
+const KEY_CLOSE = 'Escape';
+
 @Component({
   selector: 'app-lightbox',
   templateUrl: './lightbox.html',
@@ -37,9 +41,9 @@ export class Lightbox {
 
   @HostListener('document:keydown', ['$event'])
   protected onKey(event: KeyboardEvent): void {
-    if (event.key === 'ArrowLeft') this.previous();
-    else if (event.key === 'ArrowRight') this.next();
-    else if (event.key === 'Escape') this.close();
+    if (event.key === KEY_PREVIOUS) this.previous();
+    else if (event.key === KEY_NEXT) this.next();
+    else if (event.key === KEY_CLOSE) this.close();
   }
 
   protected onPointerDown(event: PointerEvent): void {

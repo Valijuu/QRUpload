@@ -22,7 +22,7 @@
 
 .download {
   border-radius: 14px;
-  background: #7f9d8c;
+  background: var(--color-accent);
   color: #ffffff;
   padding: 9px 14px;
   font-weight: 600;

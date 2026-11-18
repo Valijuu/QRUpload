@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { GALLERY_URL } from '../../app/route-paths';
 
 @Component({
   selector: 'app-buttons',
@@ -11,6 +12,6 @@ export class Buttons {
   readonly galleryButtonText = 'Zu den Fotos';
 
   openGallery(): void {
-    this.router.navigate(['/galerie']);
+    this.router.navigate([GALLERY_URL]);
   }
 }

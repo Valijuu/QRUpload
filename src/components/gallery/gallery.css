@@ -7,55 +7,36 @@
 }
 
 .eyebrow {
-  margin: 8px 0 12px;
-  font-size: 11px;
-  letter-spacing: 0.28em;
-  color: #7f9487;
-  font-weight: 600;
-}
-
-.title {
-  margin: 0;
-  font-size: 30px;
-  line-height: 1.15;
-  font-family: 'Georgia', 'Times New Roman', serif;
-  color: #41594b;
+  margin-top: 8px;
 }
 
 .subtitle {
-  margin: 10px 0 0;
+  margin-top: 10px;
   font-size: 14px;
-  color: #607568;
+  line-height: normal;
 }
 
 .status {
   margin: 28px 0 8px;
   text-align: center;
-  color: #607568;
+  color: var(--color-text-muted);
 }
 
 .status.error p {
   margin: 0 0 14px;
-  color: #a0524b;
+  color: var(--color-error);
 }
 
 .primary-btn {
-  border: none;
-  border-radius: 18px;
-  background: #7f9d8c;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 600;
   padding: 13px 18px;
-  cursor: pointer;
 }
 
 /* --- Alles herunterladen --- */
 .downloads {
   margin: 20px 0 16px;
-  border: 1px solid #e7efe9;
+  border: 1px solid var(--color-border-soft);
   border-radius: 20px;
-  background: #f7faf7;
+  background: var(--color-surface-soft);
   padding: 4px 16px;
 }
 
@@ -63,7 +44,7 @@
   cursor: pointer;
   padding: 12px 0;
   font-weight: 600;
-  color: #41594b;
+  color: var(--color-text);
 }
 
 .download-group {
@@ -73,7 +54,7 @@
 .download-group h2 {
   margin: 4px 0 2px;
   font-size: 15px;
-  color: #41594b;
+  color: var(--color-text);
 }
 
 .hint {
@@ -87,9 +68,9 @@
   margin-top: 8px;
   border-radius: 14px;
   background: #ffffff;
-  border: 1px solid #d6e2da;
+  border: 1px solid var(--color-border-input);
   padding: 11px 14px;
-  color: #41594b;
+  color: var(--color-text);
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
@@ -129,7 +110,7 @@
   border: none;
   border-radius: 10px;
   overflow: hidden;
-  background: #e7efe9;
+  background: var(--color-border-soft);
   cursor: pointer;
 }
 

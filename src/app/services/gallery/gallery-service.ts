@@ -1,13 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { apiUrl, HTTP_UNAUTHORIZED } from '../api-url';
+import { API_GALLERY_PATH, API_PHOTOS_PATH, API_ZIPS_PATH, apiUrl, HTTP_UNAUTHORIZED } from '../api-url';
 import { GalleryIndex } from './gallery-index';
 
 export type GalleryLoadResult =
   | { kind: 'ok'; index: GalleryIndex }
   | { kind: 'unauthorized' }
   | { kind: 'error' };
+
+const PHOTO_VARIANT_THUMB = 'thumb';
+const PHOTO_VARIANT_MOBILE = 'mobile';
+const PHOTO_VARIANT_ORIGINAL = 'original';
 
 @Injectable({ providedIn: 'root' })
 export class GalleryService {
@@ -24,7 +28,7 @@ export class GalleryService {
 
   async reload(): Promise<GalleryLoadResult> {
     try {
-      this.loaded = await firstValueFrom(this.http.get<GalleryIndex>(apiUrl('/api/gallery')));
+      this.loaded = await firstValueFrom(this.http.get<GalleryIndex>(apiUrl(API_GALLERY_PATH)));
       return { kind: 'ok', index: this.loaded };
     } catch (error) {
       this.loaded = null;
@@ -36,22 +40,22 @@ export class GalleryService {
   }
 
   thumbUrl(photoId: string): string {
-    return this.photoUrl(photoId, 'thumb');
+    return this.photoUrl(photoId, PHOTO_VARIANT_THUMB);
   }
 
   mobileUrl(photoId: string): string {
-    return this.photoUrl(photoId, 'mobile');
+    return this.photoUrl(photoId, PHOTO_VARIANT_MOBILE);
   }
 
   originalUrl(photoId: string): string {
-    return this.photoUrl(photoId, 'original');
+    return this.photoUrl(photoId, PHOTO_VARIANT_ORIGINAL);
   }
 
   zipUrl(name: string): string {
-    return apiUrl(`/api/zips/${encodeURIComponent(name)}`);
+    return apiUrl(`${API_ZIPS_PATH}/${encodeURIComponent(name)}`);
   }
 
   private photoUrl(photoId: string, variant: string): string {
-    return apiUrl(`/api/photos/${encodeURIComponent(photoId)}/${variant}`);
+    return apiUrl(`${API_PHOTOS_PATH}/${encodeURIComponent(photoId)}/${variant}`);
   }
 }

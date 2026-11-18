@@ -1,8 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { WIDE_ROUTE_FLAG } from './route-paths';
 
-const WIDE_ROUTE_FLAG = 'wide';
+const LOADING_SCREEN_ID = 'app-loading';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,7 @@ export class App {
       )
       .subscribe(() => {
         // Ladescreen aus index.html ausblenden, sobald die erste Navigation fertig ist
-        document.getElementById('app-loading')?.remove();
+        document.getElementById(LOADING_SCREEN_ID)?.remove();
         this.wide.set(this.deepestRouteIsWide());
       });
   }

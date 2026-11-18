@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { GALLERY_URL } from '../../app/route-paths';
 import { AuthService, LoginResult } from '../../app/services/auth/auth-service';
 
 const MESSAGES: Record<Exclude<LoginResult, 'ok'>, string> = {
@@ -35,7 +36,7 @@ export class Login {
     const result = await this.auth.login(this.password());
     this.busy.set(false);
     if (result === 'ok') {
-      await this.router.navigate(['/galerie']);
+      await this.router.navigate([GALLERY_URL]);
       return;
     }
     this.message.set(MESSAGES[result]);
