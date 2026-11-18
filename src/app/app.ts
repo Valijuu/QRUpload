@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { NavigationCancel, NavigationEnd, NavigationError, Router, RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+
+const WIDE_ROUTE_FLAG = 'wide';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +11,12 @@ import { filter } from 'rxjs';
   styleUrl: './app.css',
 })
 export class App {
-  constructor(router: Router) {
-    // Blendet den Ladescreen aus index.html aus, sobald die erste Navigation
-    // (inkl. der asynchronen Token-Prüfung im authGuard) abgeschlossen ist.
-    router.events
-      .pipe(
+  private readonly route = inject(ActivatedRoute);
+  protected readonly wide = signal(false);
+
+  constructor() {
+    inject(Router)
+      .events.pipe(
         filter(
           (event) =>
             event instanceof NavigationEnd ||
@@ -22,7 +25,17 @@ export class App {
         ),
       )
       .subscribe(() => {
+        // Ladescreen aus index.html ausblenden, sobald die erste Navigation fertig ist
         document.getElementById('app-loading')?.remove();
+        this.wide.set(this.deepestRouteIsWide());
       });
+  }
+
+  private deepestRouteIsWide(): boolean {
+    let current = this.route;
+    while (current.firstChild) {
+      current = current.firstChild;
+    }
+    return current.snapshot.data[WIDE_ROUTE_FLAG] === true;
   }
 }

@@ -1,0 +1,64 @@
+<section class="gallery">
+  <header class="intro">
+    <p class="eyebrow">UNSERE FOTOS</p>
+    <h1 class="title">Die schönsten Momente</h1>
+    @if (state() === 'ready') {
+      <p class="subtitle">{{ photos().length }} Fotos · Antippen zum Vergrößern</p>
+    }
+  </header>
+
+  @switch (state()) {
+    @case ('loading') {
+      <p class="status" aria-live="polite">Fotos werden geladen …</p>
+    }
+    @case ('error') {
+      <div class="status error" role="alert">
+        <p>Die Fotos konnten nicht geladen werden. Bitte versucht es noch einmal.</p>
+        <button type="button" class="primary-btn" (click)="retry()">Erneut versuchen</button>
+      </div>
+    }
+    @case ('ready') {
+      <details class="downloads">
+        <summary>Alle Fotos herunterladen</summary>
+        <div class="download-group downloads-original">
+          <h2>Originalqualität</h2>
+          <p class="hint">Volle Auflösung, am besten am Computer.</p>
+          @for (zip of originalZips(); track zip.name; let position = $index) {
+            <a class="download-link" [href]="gallery.zipUrl(zip.name)" download>
+              Paket {{ position + 1 }} von {{ originalZips().length }} · {{ formatBytes(zip.bytes) }}
+            </a>
+          }
+        </div>
+        <div class="download-group downloads-mobile">
+          <h2>Handy-Qualität</h2>
+          <p class="hint">Scharf auf dem Handy, deutlich kleiner.</p>
+          @for (zip of mobileZips(); track zip.name) {
+            <a class="download-link" [href]="gallery.zipUrl(zip.name)" download>
+              Alle Fotos · {{ formatBytes(zip.bytes) }}
+            </a>
+          }
+        </div>
+      </details>
+
+      <ul class="grid">
+        @for (photo of photos(); track photo.id; let position = $index) {
+          <li>
+            <button type="button" class="tile" (click)="openPhoto.set(position)" [attr.aria-label]="'Foto ' + (position + 1) + ' öffnen'">
+              <img [src]="gallery.thumbUrl(photo.id)" alt="" loading="lazy" decoding="async" />
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>
+
+@if (openPhoto() !== null) {
+  <app-lightbox
+    [photos]="photos()"
+    [index]="openPhoto()!"
+    [mobileUrl]="mobileUrl"
+    [originalUrl]="originalUrl"
+    (closed)="openPhoto.set(null)"
+  />
+}

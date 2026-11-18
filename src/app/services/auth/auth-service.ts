@@ -1,0 +1,24 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { apiUrl, HTTP_TOO_MANY_REQUESTS, HTTP_UNAUTHORIZED } from '../api-url';
+
+export type LoginResult = 'ok' | 'wrong' | 'locked' | 'error';
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private readonly http = inject(HttpClient);
+
+  /** Das Backend setzt bei Erfolg das HttpOnly-Cookie, der Browser-Code sieht es nie. */
+  async login(password: string): Promise<LoginResult> {
+    try {
+      await firstValueFrom(this.http.post(apiUrl('/api/login'), { password }));
+      return 'ok';
+    } catch (error) {
+      const status = error instanceof HttpErrorResponse ? error.status : undefined;
+      if (status === HTTP_UNAUTHORIZED) return 'wrong';
+      if (status === HTTP_TOO_MANY_REQUESTS) return 'locked';
+      return 'error';
+    }
+  }
+}

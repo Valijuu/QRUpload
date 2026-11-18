@@ -1,38 +1,16 @@
-import { Component, inject} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ActionService } from '../../app/services/actions/action-service';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-buttons',
-  imports: [],
   templateUrl: './buttons.html',
   styleUrl: './buttons.css',
 })
 export class Buttons {
-  buttonTextUpload: string = "Fotos hochladen";
-  buttonTextGallery: string = "Galerie";
-  buttonTextDailySchedule: string = "Tagesablauf";
-  buttonTextSpeisenGetraenke: string = "Speisen & Getränke";
-  buttonTextInfo: string = "Hochzeitsprofis";
+  private readonly router = inject(Router);
+  readonly galleryButtonText = 'Zu den Fotos';
 
-  private service = inject(ActionService);
-
-  onUploadClick(): void {
-    this.service.openUpload()
-  }
-  onGalleryClick(): void {
-    this.service.openGallery()
-  }
-
-  onDailyScheduleClick(): void {
-    this.service.openDailySchedule()
-  }
-
-  onSpeisenGetraenkeClick(): void {
-    this.service.openSpeisenGetraenke()
-  }
-
-  onInfoClick(): void {
-    this.service.navigateToWeddingpros()
+  openGallery(): void {
+    this.router.navigate(['/galerie']);
   }
 }

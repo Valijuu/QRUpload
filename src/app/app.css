@@ -34,6 +34,11 @@ body {
   box-shadow: 0 10px 30px rgba(70, 96, 81, 0.08);
 }
 
+/* Galerie: breiter Rahmen fuer 3-6 Kachelspalten */
+.mobile-frame.wide-frame {
+  max-width: 1280px;
+}
+
 app-welcome,
 app-buttons {
   display: block;
@@ -47,6 +52,10 @@ app-buttons {
 
   .mobile-frame {
     max-width: 420px;
+  }
+
+  .mobile-frame.wide-frame {
+    max-width: 1280px;
   }
 
   .title {

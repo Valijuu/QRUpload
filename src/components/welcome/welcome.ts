@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-welcome',
@@ -7,11 +6,11 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './welcome.css',
 })
 export class Welcome {
-  eyebrow: string = 'SCHÖN DASS IHR DA SEID';
-  title: string = 'Unsere Hochzeit';
-  subtitle: string = 'Wir freuen uns von Herzen, diesen besonderen Tag mit euch zu feiern.';
-  guestText: string =
-    'Auf dieser Seite findet ihr alle wichtigen Informationen rund um unseren Tag,' +
-    ' könnt eigene Fotos und Erinnerungen mit uns teilen und später gemeinsam die' +
-    ' schönsten Momente noch einmal erleben.';
+  readonly eyebrow = 'DANKE, DASS IHR DA WART';
+  readonly title = 'Ihr habt unseren Tag unvergesslich gemacht';
+  readonly subtitle = 'Von Herzen: Danke, dass ihr diesen besonderen Tag mit uns gefeiert habt.';
+  readonly guestText =
+    'Eure Umarmungen, euer Lachen und eure guten Wünsche haben diesen Tag zu etwas ganz Besonderem gemacht.' +
+    ' Wir sind unendlich dankbar, dass ihr dabei wart. Hier findet ihr die Fotos, damit ihr die schönsten' +
+    ' Momente noch einmal erleben und mit nach Hause nehmen könnt.';
 }

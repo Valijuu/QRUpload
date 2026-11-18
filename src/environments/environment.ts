@@ -1,9 +1,7 @@
 export const environment = {
   production: false,
-  // Nur für die lokale Entwicklung (ng serve). Für den Produktions-Build wird
-  // stattdessen environment.prod.ts verwendet, siehe README.
-  apiBaseUrl: 'http://localhost:8080',
-  uploadUrl: '',
-  galleryUrl: '',
+  // Relativ wie im Betrieb: ng serve leitet /api per proxy.conf.json an das lokale Backend weiter,
+  // damit das Sitzungs-Cookie wie in Produktion auf derselben Domain liegt.
+  apiBaseUrl: '',
   weddingImageUrl: '',
 };

@@ -1,0 +1,22 @@
+<section class="login">
+  <p class="eyebrow">UNSERE FOTOS</p>
+  <h1 class="title">Schön, dass ihr vorbeischaut</h1>
+  <p class="subtitle">Bitte gebt das Passwort ein, das wir euch geschickt haben.</p>
+
+  <form class="login-form" (submit)="submit($event)">
+    <label class="field-label" for="gallery-password">Passwort</label>
+    <input
+      id="gallery-password"
+      class="password-input"
+      type="password"
+      name="password"
+      autocomplete="current-password"
+      [value]="password()"
+      (input)="updatePassword($event)"
+    />
+    @if (message(); as text) {
+      <p class="message" role="alert">{{ text }}</p>
+    }
+    <button type="submit" class="primary-btn" [disabled]="busy() || !password()">Zu den Fotos</button>
+  </form>
+</section>
