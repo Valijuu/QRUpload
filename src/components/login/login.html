@@ -3,7 +3,7 @@
   <h1 class="title">Schön, dass ihr vorbeischaut</h1>
   <p class="subtitle">Bitte gebt das Passwort ein, das wir euch geschickt haben.</p>
 
-  <form class="login-form" (submit)="submit($event)">
+  <form class="login-form" method="post" (submit)="submit($event)">
     <label class="field-label" for="gallery-password">Passwort</label>
     <input
       id="gallery-password"
@@ -12,11 +12,13 @@
       name="password"
       autocomplete="current-password"
       [value]="password()"
+      [attr.aria-invalid]="message() ? 'true' : null"
+      [attr.aria-describedby]="message() ? 'login-message' : null"
       (input)="updatePassword($event)"
     />
     @if (message(); as text) {
-      <p class="message" role="alert">{{ text }}</p>
+      <p id="login-message" class="message" role="alert">{{ text }}</p>
     }
-    <button type="submit" class="primary-btn lifted" [disabled]="busy() || !password()">Zu den Fotos</button>
+    <button type="submit" class="primary-btn lifted" [disabled]="!password()">Zu den Fotos</button>
   </form>
 </section>

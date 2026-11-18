@@ -76,6 +76,57 @@ describe('Gallery', () => {
     expect(element.querySelectorAll('.tile').length).toBe(3);
   });
 
+  it('prüft bei einem Bildfehler die Sitzung und führt bei abgelaufener Sitzung zum Login', async () => {
+    await create({ kind: 'ok', index: GALLERY_INDEX }, { kind: 'unauthorized' });
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    (element.querySelector('.tile img') as HTMLImageElement).dispatchEvent(new Event('error'));
+    await fixture.whenStable();
+
+    expect(fakeService.reload).toHaveBeenCalled();
+    expect(navigate).toHaveBeenCalledWith(['/login']);
+  });
+
+  it('prüft beim Öffnen der Lightbox die Sitzung, damit der Download nicht ins Leere läuft', async () => {
+    await create({ kind: 'ok', index: GALLERY_INDEX }, { kind: 'ok', index: GALLERY_INDEX });
+
+    (element.querySelectorAll('.tile')[0] as HTMLElement).click();
+    await fixture.whenStable();
+
+    expect(fakeService.reload).toHaveBeenCalledTimes(1);
+  });
+
+  it('prüft beim Öffnen des Paket-Bereichs die Sitzung', async () => {
+    await create({ kind: 'ok', index: GALLERY_INDEX }, { kind: 'ok', index: GALLERY_INDEX });
+
+    const details = element.querySelector('details') as HTMLDetailsElement;
+    details.open = true; // der Browser (und jsdom) loest toggle dabei selbst aus
+
+    await vi.waitFor(() => expect(fakeService.reload).toHaveBeenCalled());
+  });
+
+  it('gibt den Fokus beim Schließen der Lightbox an die Kachel zurück', async () => {
+    await create({ kind: 'ok', index: GALLERY_INDEX }, { kind: 'ok', index: GALLERY_INDEX });
+    document.body.appendChild(element);
+    const tile = element.querySelectorAll('.tile')[1] as HTMLElement;
+
+    tile.focus();
+    tile.click();
+    await fixture.whenStable();
+    (element.querySelector('app-lightbox button.close') as HTMLButtonElement).click();
+    await fixture.whenStable();
+
+    expect(document.activeElement).toBe(tile);
+    element.remove();
+  });
+
+  it('zeigt bei einer leeren Galerie einen Hinweis', async () => {
+    await create({ kind: 'ok', index: { photos: [], zips: [] } });
+
+    expect(element.textContent).toContain('Noch keine Fotos');
+    expect(element.querySelector('details')).toBeNull();
+  });
+
   it('führt bei abgelaufener Sitzung zum Login', async () => {
     const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     await create({ kind: 'unauthorized' });

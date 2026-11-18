@@ -63,6 +63,54 @@ describe('Login', () => {
     expect(element.querySelector('[role=alert]')?.textContent).toContain('später');
   });
 
+  it('zeigt bei einem sonstigen Fehler eine Meldung', async () => {
+    loginResult = 'error';
+
+    await submit('egal');
+
+    expect(element.querySelector('[role=alert]')?.textContent).toContain('nicht geklappt');
+  });
+
+  it('verknüpft die Meldung mit dem Feld und setzt den Fokus nach einem Fehler dorthin', async () => {
+    loginResult = 'wrong';
+    document.body.appendChild(element);
+
+    await submit('falsch');
+
+    const input = element.querySelector('input') as HTMLInputElement;
+    expect(input.getAttribute('aria-invalid')).toBe('true');
+    const messageId = input.getAttribute('aria-describedby')!;
+    expect(element.querySelector(`#${messageId}`)?.textContent).toContain('Passwort');
+    expect(document.activeElement).toBe(input);
+    element.remove();
+  });
+
+  it('schickt nicht doppelt ab, solange die Anmeldung läuft', async () => {
+    let finish!: (value: LoginResult) => void;
+    login.mockImplementationOnce(() => new Promise<LoginResult>((resolve) => (finish = resolve)));
+    const input = element.querySelector('input') as HTMLInputElement;
+    input.value = 'geheim';
+    input.dispatchEvent(new Event('input'));
+
+    element.querySelector('form')!.dispatchEvent(new Event('submit'));
+    element.querySelector('form')!.dispatchEvent(new Event('submit'));
+    finish('wrong');
+    await fixture.whenStable();
+
+    expect(login).toHaveBeenCalledTimes(1);
+  });
+
+  it('sendet nie per GET und legt das Passwort nicht in URL oder Speicher', async () => {
+    loginResult = 'wrong';
+    expect(element.querySelector('form')!.getAttribute('method')).toBe('post');
+
+    await submit('geheim');
+
+    expect(location.href).not.toContain('geheim');
+    expect(JSON.stringify({ ...localStorage })).not.toContain('geheim');
+    expect(JSON.stringify({ ...sessionStorage })).not.toContain('geheim');
+  });
+
   it('schickt ein leeres Passwort nicht ab', async () => {
     await submit('');
 

@@ -45,11 +45,11 @@ Die Lightbox SHALL einen Download-Button für das Foto in Originalqualität anbi
 - **THEN** startet der Download der Originaldatei
 
 ### Requirement: Paket-Download
-Die Galerie SHALL alle vom Backend gelieferten ZIP-Pakete auflisten, getrennt nach Originalqualität (mehrere Pakete) und Handy-Qualität (ein Paket), mit Name und Größe.
+Die Galerie SHALL alle vom Backend gelieferten ZIP-Pakete auflisten, getrennt nach Originalqualität (mehrere Pakete) und Handy-Qualität (ein Paket), mit Paketnummer (z. B. „Paket 1 von 3“) und Größe.
 
 #### Scenario: Pakete anzeigen
 - **WHEN** der Gast den Bereich "Alle herunterladen" öffnet
-- **THEN** sieht er die Original-Pakete und das Handy-Qualität-Paket mit jeweils der Dateigröße
+- **THEN** sieht er die Original-Pakete (nummeriert) und das Handy-Qualität-Paket mit jeweils der Dateigröße
 
 #### Scenario: Paket herunterladen
 - **WHEN** der Gast ein Paket wählt
@@ -61,3 +61,32 @@ Die Galerie SHALL einen Ladezustand und bei Fehlern eine verständliche Meldung 
 #### Scenario: Liste kann nicht geladen werden
 - **WHEN** die Foto-Liste nicht geladen werden kann
 - **THEN** sieht der Gast eine Fehlermeldung und kann es erneut versuchen
+
+### Requirement: Abgelaufene Sitzung wird erkannt
+Die Galerie SHALL beim Laden von Bildern, beim Öffnen der Lightbox und beim Öffnen des Download-Bereichs prüfen, ob die Sitzung noch gilt, und bei einer abgelaufenen Sitzung zur Login-Seite führen. Eine zwischengespeicherte Foto-Liste SHALL höchstens 60 Sekunden gelten.
+
+#### Scenario: Offener Tab am nächsten Tag
+- **WHEN** ein Gast nach Ablauf der Sitzung wieder die Galerie öffnet
+- **THEN** wird er zum Login geführt statt kaputte Bilder zu sehen
+
+#### Scenario: Bild lässt sich nicht laden
+- **WHEN** ein Vorschaubild nicht geladen werden kann und die Sitzung abgelaufen ist
+- **THEN** wird der Gast zum Login geführt
+
+### Requirement: Bedienbare Lightbox
+Die Lightbox SHALL den Fokus beim Öffnen in den Dialog setzen, Tab im Dialog halten, beim Schließen den Fokus zur auslösenden Kachel zurückgeben, das Scrollen der Seite dahinter sperren und Vor/Zurück auch auf dem Handy für Screenreader und Tastatur erreichbar halten.
+
+#### Scenario: Öffnen und Schließen per Tastatur
+- **WHEN** ein Gast per Tastatur eine Kachel öffnet und die Lightbox mit Escape schließt
+- **THEN** liegt der Fokus beim Öffnen im Dialog und danach wieder auf der Kachel
+
+#### Scenario: Scrollen hinter der Lightbox
+- **WHEN** die Lightbox offen ist und der Gast scrollt oder wischt
+- **THEN** bleibt das Raster dahinter an seiner Position
+
+### Requirement: Leere Galerie
+Die Galerie SHALL bei null Fotos einen Hinweis statt eines leeren Rasters zeigen.
+
+#### Scenario: Noch keine Fotos
+- **WHEN** das Backend eine leere Foto-Liste liefert
+- **THEN** sieht der Gast den Hinweis „Noch keine Fotos“

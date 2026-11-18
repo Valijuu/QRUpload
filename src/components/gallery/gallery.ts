@@ -24,6 +24,7 @@ export class Gallery implements OnInit {
   protected readonly state = signal<ViewState>('loading');
   protected readonly index = signal<GalleryIndex | null>(null);
   protected readonly openPhoto = signal<number | null>(null);
+  private lastTile: HTMLElement | null = null;
 
   protected readonly photos = computed(() => this.index()?.photos ?? []);
   protected readonly originalZips = computed(() => this.zipsOfKind(ZIP_KIND_ORIGINAL));
@@ -34,6 +35,31 @@ export class Gallery implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.show(await this.gallery.load());
+  }
+
+  /** Prueft, ob die Sitzung noch gilt: bei kaputten Bildern, beim Oeffnen der Lightbox und der Pakete. */
+  protected async checkSession(): Promise<void> {
+    const result = await this.gallery.reload();
+    if (result.kind === 'unauthorized') {
+      await this.router.navigate([LOGIN_URL]);
+    }
+  }
+
+  protected openLightbox(position: number, event: Event): void {
+    this.lastTile = event.currentTarget as HTMLElement;
+    this.openPhoto.set(position);
+    void this.checkSession();
+  }
+
+  protected closeLightbox(): void {
+    this.openPhoto.set(null);
+    this.lastTile?.focus();
+  }
+
+  protected onDownloadsToggle(event: Event): void {
+    if ((event.target as HTMLDetailsElement).open) {
+      void this.checkSession();
+    }
   }
 
   protected async retry(): Promise<void> {

@@ -4,6 +4,8 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { GalleryService } from './gallery-service';
 import { GALLERY_INDEX } from '../../../testing/gallery-fixtures';
 
+const CACHE_LIFETIME_MS = 60_000;
+
 describe('GalleryService', () => {
   let service: GalleryService;
   let http: HttpTestingController;
@@ -41,6 +43,23 @@ describe('GalleryService', () => {
 
     expect(await service.load()).toEqual({ kind: 'ok', index: GALLERY_INDEX });
     http.expectNone('/api/gallery');
+  });
+
+  it('fragt nach Ablauf der Zwischenspeicherzeit wieder beim Backend nach (Sitzung kann abgelaufen sein)', async () => {
+    vi.useFakeTimers();
+    try {
+      const first = service.load();
+      http.expectOne('/api/gallery').flush(GALLERY_INDEX);
+      await first;
+
+      vi.advanceTimersByTime(CACHE_LIFETIME_MS + 1);
+      const second = service.load();
+      http.expectOne('/api/gallery').flush(null, { status: 401, statusText: 'Unauthorized' });
+
+      expect(await second).toEqual({ kind: 'unauthorized' });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('lädt nach reload() neu', async () => {

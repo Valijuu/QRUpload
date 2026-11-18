@@ -11,7 +11,7 @@
 
 ## 3. Login
 
-- [x] 3.1 `AuthService` mit `login(passwort)` (POST `/api/login`) und `checkSession()` (GET `/api/gallery` Kopf) mit Tests für Erfolg, 401 und 429
+- [x] 3.1 `AuthService` mit `login(passwort)` (POST `/api/login`) mit Tests für Erfolg, 401 und 429; die Sitzungsprüfung übernimmt `GalleryService.load()`/`reload()` (GET `/api/gallery`)
 - [x] 3.2 Login-Komponente mit einem Passwortfeld, Fehler- und Sperr-Meldung und Komponententests
 - [x] 3.3 Guard für `galerie`, der ohne Sitzung zu `login` umleitet, mit Test
 

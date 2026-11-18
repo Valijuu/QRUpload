@@ -1,11 +1,11 @@
 <div class="backdrop" role="dialog" aria-modal="true" aria-label="Foto in groß">
   <div class="toolbar">
-    <span class="counter">{{ current() + 1 }} / {{ photos().length }}</span>
+    <span class="counter" aria-live="polite">{{ current() + 1 }} / {{ photos().length }}</span>
     <a class="download" [href]="originalUrl()(photo().id)" download>Original herunterladen</a>
     <button type="button" class="close" (click)="close()" aria-label="Schließen">✕</button>
   </div>
 
-  <div class="stage" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)">
+  <div class="stage" (pointerdown)="onPointerDown($event)" (pointerup)="onPointerUp($event)" (pointercancel)="onPointerCancel()">
     <img [src]="mobileUrl()(photo().id)" [alt]="'Foto ' + (current() + 1)" draggable="false" />
   </div>
 

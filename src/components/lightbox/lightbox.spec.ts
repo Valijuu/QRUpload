@@ -82,6 +82,60 @@ describe('Lightbox', () => {
     expect(link.hasAttribute('download')).toBe(true);
   });
 
+  it('setzt den Fokus beim Öffnen auf den Schließen-Button', async () => {
+    document.body.appendChild(element);
+    fixture.destroy();
+    const again = TestBed.createComponent(Lightbox);
+    again.componentRef.setInput('photos', GALLERY_INDEX.photos);
+    again.componentRef.setInput('index', 0);
+    again.componentRef.setInput('mobileUrl', urls.mobile);
+    again.componentRef.setInput('originalUrl', urls.original);
+    document.body.appendChild(again.nativeElement);
+    again.detectChanges();
+    await again.whenStable();
+
+    expect(document.activeElement).toBe((again.nativeElement as HTMLElement).querySelector('button.close'));
+    again.nativeElement.remove();
+  });
+
+  it('hält den Fokus mit Tab im Dialog', async () => {
+    document.body.appendChild(element);
+    const focusable = Array.from(
+      element.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+    );
+    const last = focusable[focusable.length - 1];
+    last.focus();
+
+    const event = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
+    document.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(focusable[0]);
+    element.remove();
+  });
+
+  it('sperrt das Scrollen der Seite, solange die Lightbox offen ist', async () => {
+    expect(document.body.style.overflow).toBe('hidden');
+
+    fixture.destroy();
+
+    expect(document.body.style.overflow).toBe('');
+  });
+
+  it('sagt den Bildwechsel für Screenreader an', () => {
+    expect(element.querySelector('.counter')?.getAttribute('aria-live')).toBe('polite');
+  });
+
+  it('bricht ein Wischen bei pointercancel ab', async () => {
+    const stage = element.querySelector('.stage') as HTMLElement;
+    stage.dispatchEvent(new PointerEvent('pointerdown', { clientX: 300 }));
+    stage.dispatchEvent(new PointerEvent('pointercancel'));
+    stage.dispatchEvent(new PointerEvent('pointerup', { clientX: 100 }));
+    await fixture.whenStable();
+
+    expect(shownSrc()).toBe('/api/photos/bbbb0002/mobile');
+  });
+
   it('schließt mit Escape und dem Schließen-Button', async () => {
     const closed = vi.fn();
     fixture.componentInstance.closed.subscribe(closed);

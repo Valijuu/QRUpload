@@ -1,5 +1,7 @@
 # Danke-Seite und Foto-Galerie – Entwurf
 
+> **Historisch:** Ausgangsentwurf der Brainstorming-Phase. Maßgeblich sind die OpenSpec-Changes `openspec/changes/danke-galerie-frontend/` und im Backend-Repo `danke-galerie-backend`.
+
 Stand: 2026-11-18 · Repos: `QRUpload` (Frontend, Angular) und `qrupload-backend-public` (Backend, Spring Boot) · Branch je Repo: `feature/danke-galerie`
 
 ## Absicht und Warum

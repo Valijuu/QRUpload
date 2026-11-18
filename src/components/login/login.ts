@@ -1,7 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import { GALLERY_URL } from '../../app/route-paths';
 import { AuthService, LoginResult } from '../../app/services/auth/auth-service';
+
+const PASSWORD_INPUT_ID = 'gallery-password';
 
 const MESSAGES: Record<Exclude<LoginResult, 'ok'>, string> = {
   wrong: 'Das Passwort stimmt leider nicht. Bitte versucht es noch einmal.',
@@ -17,6 +20,7 @@ const MESSAGES: Record<Exclude<LoginResult, 'ok'>, string> = {
 export class Login {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
 
   protected readonly password = signal('');
   protected readonly message = signal<string | null>(null);
@@ -40,5 +44,6 @@ export class Login {
       return;
     }
     this.message.set(MESSAGES[result]);
+    this.document.getElementById(PASSWORD_INPUT_ID)?.focus();
   }
 }

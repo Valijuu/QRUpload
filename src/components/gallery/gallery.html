@@ -18,7 +18,10 @@
       </div>
     }
     @case ('ready') {
-      <details class="downloads">
+      @if (photos().length === 0) {
+        <p class="status">Noch keine Fotos. Schaut bald wieder vorbei!</p>
+      } @else {
+      <details class="downloads" (toggle)="onDownloadsToggle($event)">
         <summary>Alle Fotos herunterladen</summary>
         <div class="download-group downloads-original">
           <h2>Originalqualität</h2>
@@ -43,12 +46,13 @@
       <ul class="grid">
         @for (photo of photos(); track photo.id; let position = $index) {
           <li>
-            <button type="button" class="tile" (click)="openPhoto.set(position)" [attr.aria-label]="'Foto ' + (position + 1) + ' öffnen'">
-              <img [src]="gallery.thumbUrl(photo.id)" alt="" loading="lazy" decoding="async" />
+            <button type="button" class="tile" (click)="openLightbox(position, $event)" [attr.aria-label]="'Foto ' + (position + 1) + ' öffnen'">
+              <img [src]="gallery.thumbUrl(photo.id)" alt="" loading="lazy" decoding="async" (error)="checkSession()" />
             </button>
           </li>
         }
       </ul>
+      }
     }
   }
 </section>
@@ -59,6 +63,6 @@
     [index]="openPhoto()!"
     [mobileUrl]="mobileUrl"
     [originalUrl]="originalUrl"
-    (closed)="openPhoto.set(null)"
+    (closed)="closeLightbox()"
   />
 }

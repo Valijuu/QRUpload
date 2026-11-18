@@ -9,6 +9,10 @@ export type GalleryLoadResult =
   | { kind: 'unauthorized' }
   | { kind: 'error' };
 
+// Kurz genug, dass eine abgelaufene Sitzung (6 h) beim naechsten Oeffnen der Galerie auffaellt,
+// lang genug fuer die Uebergabe vom Guard an die Seite
+const CACHE_LIFETIME_MS = 60_000;
+
 const PHOTO_VARIANT_THUMB = 'thumb';
 const PHOTO_VARIANT_MOBILE = 'mobile';
 const PHOTO_VARIANT_ORIGINAL = 'original';
@@ -17,10 +21,11 @@ const PHOTO_VARIANT_ORIGINAL = 'original';
 export class GalleryService {
   private readonly http = inject(HttpClient);
   private loaded: GalleryIndex | null = null;
+  private loadedAt = 0;
 
-  /** Liefert die Galerie, beim zweiten Aufruf (z. B. Guard, dann Seite) ohne neue Anfrage. */
+  /** Liefert die Galerie, kurz nach einem Laden (Guard, dann Seite) ohne neue Anfrage. */
   load(): Promise<GalleryLoadResult> {
-    if (this.loaded) {
+    if (this.loaded && Date.now() - this.loadedAt < CACHE_LIFETIME_MS) {
       return Promise.resolve({ kind: 'ok', index: this.loaded });
     }
     return this.reload();
@@ -29,6 +34,7 @@ export class GalleryService {
   async reload(): Promise<GalleryLoadResult> {
     try {
       this.loaded = await firstValueFrom(this.http.get<GalleryIndex>(apiUrl(API_GALLERY_PATH)));
+      this.loadedAt = Date.now();
       return { kind: 'ok', index: this.loaded };
     } catch (error) {
       this.loaded = null;
