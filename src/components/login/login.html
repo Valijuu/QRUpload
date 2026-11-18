@@ -24,13 +24,7 @@
       [attr.aria-label]="revealed() ? 'Passwort verbergen' : 'Passwort anzeigen'"
       (click)="toggleReveal()"
     >
-      <svg class="eye" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
-        <circle cx="12" cy="12" r="3" />
-        @if (revealed()) {
-          <path d="M3 3l18 18" />
-        }
-      </svg>
+      <span class="monkey" aria-hidden="true">{{ revealed() ? '🐵' : '🙈' }}</span>
     </button>
     </div>
     @if (message(); as text) {
