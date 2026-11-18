@@ -5,10 +5,11 @@
 
   <form class="login-form" method="post" (submit)="submit($event)">
     <label class="field-label" for="gallery-password">Passwort</label>
+    <div class="password-field">
     <input
       id="gallery-password"
       class="password-input"
-      type="password"
+      [type]="revealed() ? 'text' : 'password'"
       name="password"
       autocomplete="current-password"
       [value]="password()"
@@ -16,6 +17,22 @@
       [attr.aria-describedby]="message() ? 'login-message' : null"
       (input)="updatePassword($event)"
     />
+    <button
+      type="button"
+      class="reveal"
+      [attr.aria-pressed]="revealed()"
+      [attr.aria-label]="revealed() ? 'Passwort verbergen' : 'Passwort anzeigen'"
+      (click)="toggleReveal()"
+    >
+      <svg class="eye" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+        <circle cx="12" cy="12" r="3" />
+        @if (revealed()) {
+          <path d="M3 3l18 18" />
+        }
+      </svg>
+    </button>
+    </div>
     @if (message(); as text) {
       <p id="login-message" class="message" role="alert">{{ text }}</p>
     }

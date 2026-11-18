@@ -14,8 +14,16 @@
   color: var(--color-text-muted);
 }
 
+.password-field {
+  position: relative;
+}
+
+/* Das Feld rechnet Rahmen und Innenabstand in die Breite ein, sonst ragt es über die Karte */
 .password-input {
+  box-sizing: border-box;
+  display: block;
   width: 100%;
+  padding-right: 52px;
   border: 1px solid var(--color-border-input);
   border-radius: 16px;
   padding: 14px 16px;
@@ -38,4 +46,27 @@
 
 .primary-btn {
   margin-top: 6px;
+}
+
+.reveal {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text-muted, #607568);
+  cursor: pointer;
+}
+
+.reveal:hover {
+  color: var(--color-text);
+}
+
+.reveal:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
 }

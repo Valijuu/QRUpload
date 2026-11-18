@@ -28,7 +28,7 @@ describe('Login', () => {
     await fixture.whenStable();
   }
 
-  it('hat genau ein Passwortfeld und einen Button', () => {
+  it('hat genau ein Passwortfeld und einen Absende-Button', () => {
     const inputs = element.querySelectorAll('input');
     expect(inputs.length).toBe(1);
     expect(inputs[0].type).toBe('password');
@@ -109,6 +109,23 @@ describe('Login', () => {
     expect(location.href).not.toContain('geheim');
     expect(JSON.stringify({ ...localStorage })).not.toContain('geheim');
     expect(JSON.stringify({ ...sessionStorage })).not.toContain('geheim');
+  });
+
+  it('zeigt das Passwort per Schalter im Klartext und verbirgt es wieder', async () => {
+    const toggle = element.querySelector('button.reveal') as HTMLButtonElement;
+    const input = element.querySelector('input') as HTMLInputElement;
+    expect(input.type).toBe('password');
+    expect(toggle.getAttribute('aria-pressed')).toBe('false');
+
+    toggle.click();
+    await fixture.whenStable();
+    expect(input.type).toBe('text');
+    expect(toggle.getAttribute('aria-pressed')).toBe('true');
+    expect(toggle.getAttribute('aria-label')).toBe('Passwort verbergen');
+
+    toggle.click();
+    await fixture.whenStable();
+    expect(input.type).toBe('password');
   });
 
   it('schickt ein leeres Passwort nicht ab', async () => {

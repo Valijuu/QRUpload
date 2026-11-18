@@ -25,6 +25,11 @@ export class Login {
   protected readonly password = signal('');
   protected readonly message = signal<string | null>(null);
   protected readonly busy = signal(false);
+  protected readonly revealed = signal(false);
+
+  protected toggleReveal(): void {
+    this.revealed.update((value) => !value);
+  }
 
   protected updatePassword(event: Event): void {
     this.password.set((event.target as HTMLInputElement).value);
