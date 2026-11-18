@@ -3,6 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { AuthService } from './auth-service';
 
+const LOGIN_TIMEOUT_MS = 15_000;
+
 describe('AuthService', () => {
   let service: AuthService;
   let http: HttpTestingController;
@@ -44,5 +46,19 @@ describe('AuthService', () => {
     const result = service.login('geheim');
     answer(503);
     expect(await result).toBe('error');
+  });
+
+  it('gibt nach der Zeitgrenze auf, damit das Formular nicht dauerhaft gesperrt bleibt', async () => {
+    vi.useFakeTimers();
+    try {
+      const result = service.login('geheim');
+      http.expectOne('/api/login'); // Antwort bleibt aus
+
+      await vi.advanceTimersByTimeAsync(LOGIN_TIMEOUT_MS + 1);
+
+      expect(await result).toBe('error');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });
