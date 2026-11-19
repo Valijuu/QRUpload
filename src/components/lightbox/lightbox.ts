@@ -92,7 +92,10 @@ export class Lightbox {
     this.immersive.set(true);
     // Der Fokus geht auf das Foto, die Buttons sind jetzt ausgeblendet
     queueMicrotask(() => this.stage()?.focus());
-    void this.fullscreen.enter(this.host);
+    void this.fullscreen.enter(this.host).then(() => {
+      // Kam die Anfrage erst an, nachdem die Lightbox schon ins Normale zurueck ist, wieder verlassen
+      if (!this.immersive() && this.fullscreen.isActive()) void this.fullscreen.exit();
+    });
   }
 
   private leaveImmersive(): void {
@@ -120,6 +123,8 @@ export class Lightbox {
   }
 
   protected onPointerDown(event: PointerEvent): void {
+    // Ein Ziehen, das ausserhalb der Buehne endet, bleibt bei der Buehne und wird dort beendet
+    this.stage()?.setPointerCapture?.(event.pointerId);
     this.gesture.down(event.pointerId, this.stagePoint(event));
   }
 

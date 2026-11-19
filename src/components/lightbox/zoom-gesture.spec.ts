@@ -96,4 +96,21 @@ describe('ZoomGesture', () => {
     gesture.reset();
     expect(gesture.view).toEqual(IDENTITY);
   });
+
+  it('zaehlt ein Ziehen, das zum Ausgangspunkt zurueckkehrt, nicht als Antippen', () => {
+    gesture.down(1, { x: 0, y: 0 });
+    gesture.move(1, { x: -100, y: 0 });
+    expect(gesture.up(1, { x: 0, y: 0 })).toBe('none');
+  });
+
+  it('verschiebt ab der aktuellen Position, wenn ein Pinch-Finger abgebrochen wird', () => {
+    gesture.down(1, { x: -50, y: 0 });
+    gesture.down(2, { x: 50, y: 0 });
+    gesture.move(2, { x: 150, y: 0 });
+    gesture.cancel(2);
+    const zoomed = gesture.view.scale;
+
+    gesture.move(1, { x: -40, y: 0 });
+    expect(gesture.view.scale).toBe(zoomed);
+  });
 });

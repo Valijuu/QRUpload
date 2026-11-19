@@ -30,6 +30,8 @@ export class ZoomGesture {
   // Nach einem Pinch soll das Loslassen weder wischen noch tippen
   private pinched = false;
   private lastTap: { time: number; point: Point } | null = null;
+  // Weiteste Strecke vom Startpunkt waehrend der Geste: unterscheidet Ziehen von Antippen
+  private maxDisplacement = 0;
 
   constructor(
     private readonly bounds: () => ZoomBounds,
@@ -57,6 +59,7 @@ export class ZoomGesture {
   move(id: number, point: Point): void {
     if (!this.pointers.has(id)) return;
     this.pointers.set(id, point);
+    if (this.start) this.maxDisplacement = Math.max(this.maxDisplacement, distance(this.start, point));
     if (this.pinch && this.pointers.size >= 2) {
       this.updatePinch();
     } else if (this.start && this.zoomed && this.pointers.size === 1) {
@@ -89,11 +92,17 @@ export class ZoomGesture {
   }
 
   cancel(id: number): void {
-    this.pointers.delete(id);
+    if (!this.pointers.delete(id)) return;
     if (this.pointers.size === 0) {
       this.start = null;
       this.pinch = null;
       this.pinched = false;
+      return;
+    }
+    if (this.pinched && this.pointers.size === 1) {
+      // Der verbleibende Finger verschiebt ab seiner aktuellen Position, nicht ab der Pinch-Ausgangslage
+      this.pinch = null;
+      this.beginSingle(this.pointers.values().next().value!);
     }
   }
 
@@ -104,11 +113,13 @@ export class ZoomGesture {
     this.pinch = null;
     this.pinched = false;
     this.lastTap = null;
+    this.maxDisplacement = 0;
   }
 
   private beginSingle(point: Point): void {
     this.start = point;
     this.startView = this.current;
+    this.maxDisplacement = 0;
   }
 
   private beginPinch(): void {
@@ -131,7 +142,8 @@ export class ZoomGesture {
   }
 
   private finishSingle(start: Point, end: Point): GestureResult {
-    const moved = distance(start, end);
+    // Ziehen und Zurueckkehren zaehlt als Ziehen, auch wenn Start und Ende zusammenliegen
+    const moved = Math.max(this.maxDisplacement, distance(start, end));
     if (moved <= TAP_SLOP) return this.registerTap(end);
     this.lastTap = null;
     if (this.startView.scale > MIN_SCALE) return 'none';
