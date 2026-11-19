@@ -59,6 +59,8 @@ export class Lightbox {
       this.document.body.style.overflow = previousOverflow;
       stopListening();
       this.cancelTapTimer();
+      // Auch eine erst verspätet ankommende Vollbild-Anfrage wird danach wieder verlassen
+      this.immersive.set(false);
       void this.fullscreen.exit();
     });
     // Ein neues Foto erscheint immer ganz, nicht gezoomt
