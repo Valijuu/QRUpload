@@ -145,4 +145,61 @@ describe('Lightbox', () => {
 
     expect(closed).toHaveBeenCalledTimes(2);
   });
+
+  describe('Zoom', () => {
+    function pointer(type: string, id: number, x: number) {
+      const stage = element.querySelector('.stage') as HTMLElement;
+      stage.dispatchEvent(new PointerEvent(type, { pointerId: id, clientX: x, clientY: 0 }));
+    }
+
+    function size(selector: string, width: number, height: number) {
+      const target = element.querySelector(selector) as HTMLElement;
+      Object.defineProperty(target, 'clientWidth', { configurable: true, value: width });
+      Object.defineProperty(target, 'clientHeight', { configurable: true, value: height });
+    }
+
+    async function pinchToDouble() {
+      pointer('pointerdown', 1, -50);
+      pointer('pointerdown', 2, 50);
+      pointer('pointermove', 2, 150);
+      pointer('pointerup', 2, 150);
+      pointer('pointerup', 1, -50);
+      await fixture.whenStable();
+    }
+
+    beforeEach(() => {
+      size('.stage', 400, 800);
+      size('.stage img', 400, 800);
+    });
+
+    function transform() {
+      return (element.querySelector('.stage img') as HTMLElement).style.transform;
+    }
+
+    it('vergroessert das Foto mit zwei Fingern', async () => {
+      await pinchToDouble();
+      expect(transform()).toContain('scale(2)');
+    });
+
+    it('verschiebt ein gezoomtes Foto, ohne das Foto zu wechseln', async () => {
+      await pinchToDouble();
+      pointer('pointerdown', 3, 0);
+      pointer('pointermove', 3, -200);
+      pointer('pointerup', 3, -200);
+      await fixture.whenStable();
+
+      expect(shownSrc()).toBe('/api/photos/bbbb0002/mobile');
+      // Der Pinch hat das Foto um 50 px mitgefuehrt, das Verschieben zieht 200 px ab
+      expect(transform()).toContain('translate(-150px');
+    });
+
+    it('zeigt ein neues Foto wieder ungezoomt', async () => {
+      await pinchToDouble();
+      (element.querySelector('button.next') as HTMLButtonElement).click();
+      await fixture.whenStable();
+
+      expect(shownSrc()).toBe('/api/photos/cccc0003/mobile');
+      expect(transform()).toContain('scale(1)');
+    });
+  });
 });
