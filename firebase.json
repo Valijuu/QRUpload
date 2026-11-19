@@ -10,7 +10,7 @@
       {
         "source": "/api/**",
         "run": {
-          "serviceId": "REPLACE_WITH_CLOUD_RUN_SERVICE_ID",
+          "serviceId": "qrupload-backend",
           "region": "europe-west3"
         }
       },
