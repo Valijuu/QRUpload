@@ -60,3 +60,6 @@ public/Speisekarte.png
 # Original-Fotos/Links vor der Anonymisierung fürs öffentliche Repo,
 # niemals committen (siehe private-restore/RESTORE.md)
 private-restore/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
