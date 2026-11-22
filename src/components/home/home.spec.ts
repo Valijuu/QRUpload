@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Home } from './home';
 import { environment } from '../../environments/environment';
 
@@ -10,7 +12,7 @@ describe('Home (Dankeseite)', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Home],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
     fixture = TestBed.createComponent(Home);
     await fixture.whenStable();
@@ -21,6 +23,10 @@ describe('Home (Dankeseite)', () => {
     const image = element.querySelector('.wedding-image-card img.wedding-image') as HTMLImageElement;
     expect(image).toBeTruthy();
     expect(image.getAttribute('src')).toBe(environment.weddingImageUrl);
+  });
+
+  it('startet beim Öffnen schon die Galerie-Anfrage, um das Backend aufzuwecken', () => {
+    TestBed.inject(HttpTestingController).expectOne('/api/gallery');
   });
 
   it('zeigt den Dankestext', () => {

@@ -22,13 +22,18 @@ export class GalleryService {
   private readonly http = inject(HttpClient);
   private loaded: GalleryIndex | null = null;
   private loadedAt = 0;
+  private pending: Promise<GalleryLoadResult> | null = null;
 
-  /** Liefert die Galerie, kurz nach einem Laden (Guard, dann Seite) ohne neue Anfrage. */
+  /**
+   * Liefert die Galerie, kurz nach einem Laden (Guard, dann Seite) ohne neue Anfrage.
+   * Eine laufende Anfrage, etwa das Vorwaermen von der Dankeseite, wird mitbenutzt.
+   */
   load(): Promise<GalleryLoadResult> {
     if (this.loaded && Date.now() - this.loadedAt < CACHE_LIFETIME_MS) {
       return Promise.resolve({ kind: 'ok', index: this.loaded });
     }
-    return this.reload();
+    this.pending ??= this.reload().finally(() => (this.pending = null));
+    return this.pending;
   }
 
   async reload(): Promise<GalleryLoadResult> {

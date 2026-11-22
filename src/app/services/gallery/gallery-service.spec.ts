@@ -24,6 +24,14 @@ describe('GalleryService', () => {
     expect(await result).toEqual({ kind: 'ok', index: GALLERY_INDEX });
   });
 
+  it('nutzt eine laufende Anfrage mit, statt eine zweite zu starten', async () => {
+    const warmUp = service.load();
+    const guard = service.load();
+    http.expectOne('/api/gallery').flush(GALLERY_INDEX);
+    expect(await guard).toEqual({ kind: 'ok', index: GALLERY_INDEX });
+    expect(await warmUp).toEqual({ kind: 'ok', index: GALLERY_INDEX });
+  });
+
   it('meldet abgelaufene Sitzung bei 401', async () => {
     const result = service.load();
     http.expectOne('/api/gallery').flush(null, { status: 401, statusText: 'Unauthorized' });
